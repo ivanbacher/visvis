@@ -30,6 +30,14 @@ export class App {
 				return el;
 			}
 		});
+		labelsB.push('^')
+		labelsB.push('^')
+		labelsB.push('^')
+		labelsB.push('^')
+		labelsB.push('^')
+		labelsB.push('^')
+		labelsB.push('^')
+
 
 		let labelsC = d3.range(data2.length);
 		let labelsD = d3.range(32); // 32 frames
@@ -60,15 +68,18 @@ export class App {
 		  });
 		});
 
-		data2.forEach( (a, ai) => {
-		  a.forEach( (b, bi) => {
+		data2.forEach( (c, ci) => {
+		  c.forEach( (d, di) => {
 		    linkData2.push({
-		      ai: +ai,
-		      bi: +bi,
-		      v: +data2[ai][bi]
+		      ci: +ci,
+		      di: +di,
+		      v: +data2[ci][di]
 		    });
 		  });
 		});
+
+		console.log(linkData1)
+		console.log(linkData2)
 
 		// DATA -- END
 
@@ -80,7 +91,7 @@ export class App {
 		
 		let html = d3.select("#attentional-ex3");
 		let outerWidth = 984; //Math.max(700, html.node().getBoundingClientRect().width);
-		let outerHeight = 560;
+		let outerHeight = 460;
 		let margin = {top: 36, right: nodeMargin + 80, bottom: 24, left: nodeMargin};
 		let width = outerWidth - margin.left - margin.right;
 		let height = outerHeight - margin.top - margin.bottom;
@@ -116,75 +127,78 @@ export class App {
 		let networkHeightD = nodeSizeD + nodeMargin * 2;
 		
 		let linkB_A = function(d) {
-		  return "M" + (xb(d.bi) + nodeSizeB / 2) + "," + (nodeSizeB + nodeMargin)
+		  let temp = "M" + (xb(d.bi) + nodeSizeB / 2) + "," + (nodeSizeB + nodeMargin)
 		      + "C" + (xb(d.bi) + nodeSizeB / 2) + "," + (nodeSizeB + networkMargin / 3 + nodeMargin)
 		      + " " + (xa(d.ai) + nodeSizeA / 2) + "," + (networkMargin - networkMargin / 3 + nodeMargin)
 		      + " " + (xa(d.ai) + nodeSizeA / 2) + "," + (networkMargin + nodeMargin);
+
+		  return temp;
 		};
 
 		let linkC_D = function(d) {
-		  return "M" + (xa(d.ai) + nodeSizeC / 2) + "," + (nodeSizeC + nodeMargin)
-		      + "C" + (xa(d.ai) + nodeSizeC / 2) + "," + (nodeSizeC + networkMargin / 3 + nodeMargin)
-		      + " " + (xd(d.bi) + nodeSizeD / 2) + "," + (networkMargin - networkMargin / 3 + nodeMargin)
-		      + " " + (xd(d.bi) + nodeSizeD / 2) + "," + (networkMargin + nodeMargin);
+		  return "M" + (xc(d.ci) + nodeSizeC / 2) + "," + (nodeSizeC + nodeMargin)
+		      + "C" + (xc(d.ci) + nodeSizeC / 2) + "," + (nodeSizeC + networkMargin / 3 + nodeMargin)
+		      + " " + (xd(d.di) + nodeSizeD / 2) + "," + (networkMargin - networkMargin / 3 + nodeMargin)
+		      + " " + (xd(d.di) + nodeSizeD / 2) + "," + (networkMargin + nodeMargin);
 		};
-
 
 
 		function onmouseoverA(d, i) {
 
-			console.log('onmouseoverA');
+			console.log('onmouseoverA ->', i);
 
-		 	linklink.style("display", (ld) => {
+		 	linklink1.style("display", (ld) => {
         return ld.ai === i ? "" : "none";
       });
 
       linklink2.style("display", (ld) => {
-	      return ld.ai === i ? "" : "none";
+	      return ld.ci === i ? "" : "none";
 	    });
 		}
 
 	  function onmouseoverB(d, i) {
-	  	console.log('onmouseoverB');
+	  	console.log('onmouseoverB ->', i);
 
-		 	linklink.style("display", (ld) => {
+		 	linklink1.style("display", (ld) => {
 	      return ld.bi === i ? "" : "none";
 	    });
 
 	    linklink2.style("display", (ld) => {
-	      return ld.bi === i ? "" : "none";
+	      return ld.di === i ? "" : "none";
 	    });
 	 	}
 
 	 	function onmouseoverC(d, i) {
-	 		console.log('onmouseoverC');
+	 		console.log('onmouseoverC ->', i);
 
-		 	linklink.style("display", (ld) => {
+		 	linklink1.style("display", (ld) => {
 	      return ld.ai === i ? "" : "none";
 	    });
 
 	    linklink2.style("display", (ld) => {
-	      return ld.ai === i ? "" : "none";
+	      return ld.ci === i ? "" : "none";
 	    });
 	 	}
 
 	 	let onmouseoverD = (d, i)  => {
-	 		console.log('onmouseoverD');
+	 		console.log('onmouseoverD ->', i);
 
-		 	linklink.style("display", (ld) => {
+		 	linklink1.style("display", (ld) => {
 	      return ld.bi === i ? "" : "none";
 	    });
 
 	    linklink2.style("display", (ld) => {
-	      return ld.bi === i ? "" : "none";
+	      return ld.di === i ? "" : "none";
 	    });
 
-	    this.mouthSource = '/try1/00039_aligned_mouth_gray/frame_det_00_' + pad(i + 1, 6) + '.png';
+	    this.mouthSource = './try1/00039_aligned_mouth_gray/frame_det_00_' + pad(i + 1, 6) + '.png';
 	 	}
 
-	  function onmouseout() {
-	 		linklink.style("display", "");
+	  let onmouseout = () => {
+	 		linklink1.style("display", "");
 	    linklink2.style("display", "");
+
+	    this.mouthSource = '';
 	  }
 
 	  function pad(num, size) {
@@ -342,9 +356,9 @@ export class App {
 		//
 		// Links 1 (B - A)
 		//
-		let linkGroup = svg.append("g").attr("class", ".link-group-1");
+		let linkGroup1 = svg.append("g").attr("class", ".link-group-1");
 
-		let linklink = linkGroup.selectAll(".link")
+		let linklink1 = linkGroup1.selectAll(".link")
 		    .data(linkData1)
 		  .enter().append("path")
 		    .attr("class", "link")
@@ -468,7 +482,7 @@ export class App {
 
 		cellC.append("rect")
 		    .style("opacity", 0)
-		    .attr("transform", "translate(-" + ((xc.step() - nodeSizeA) / 2) + ",-" + (nodeMargin + (networkMargin - networkHeightD) / 2) + ")")
+		    .attr("transform", "translate(-" + ((xc.step() - nodeSizeC) / 2) + ",-" + (nodeMargin + (networkMargin - networkHeightD) / 2) + ")")
 		    .attr("width", xc.step())
 		    .attr("height", networkHeightA + (networkMargin - networkHeightC) / 2 + audioHeight + nodeMargin * 2);
 
@@ -560,6 +574,10 @@ export class App {
 		    .attr("class", "link")
 		    .attr("d", linkC_D)
 		    .style("opacity", function(d) { return d.v; });
+
+		console.log(linklink1)
+
+		console.log(linklink2)
 
 
 
