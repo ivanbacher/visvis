@@ -13,6 +13,7 @@ import 'normalize.css';
 export class App {
   constructor() {
   	this.mouthSource = '';
+  	this.waveSrc = './try1/00039_spectrogram.png';
   }
 
   attached() {
@@ -373,9 +374,9 @@ export class App {
 		//
 		html.select(".waveform")
     	.style("left", "1%")
-    	.style("top", "39%")
+    	.style("top", "49%")
     	.style("width", "90%")
-    	.style("height", "58px");
+    	.style("height", "50px");
 
     let audio = svg.append("g")
 		  .attr("class", "audio")
