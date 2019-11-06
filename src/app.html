@@ -103,6 +103,10 @@
 }
 
 	</style>
+  <input type="file" id="filepicker" name="fileList"
+  onchange="handleFiles(this.files)"
+  webkitdirectory multiple>         
+  </input>
 
  <figure id="attentional-ex3" class="l-page">
   <div class="stage">
@@ -116,12 +120,13 @@
 	      </marker>
 	    </defs>
   		<g class="labels">
-        <text transform="translate(0, 18)">output text</text>
-        <text transform="translate(0, 55)">network B</text>
-        <text transform="translate(0, 195)">network A</text>
-        <text transform="translate(0, 250)">input audio</text>
-        <text transform="translate(0, 305)">network A</text>
-        <text transform="translate(0, 445)">output frames</text>
+        <text transform="translate(0, 18)">Output text</text>
+        <text transform="translate(0, 55)">Decoder</text>
+        <text transform="translate(0, 195)">Encoder fusion</text>
+        <text transform="translate(0, 250)">Input audio</text>
+        <text transform="translate(0, 305)">Encoder fusion</text>
+        <text transform="translate(0, 455)">Encoder video</text>
+        <text transform="translate(0, 495)">Input video</text>
       </g>
   	</svg>
 

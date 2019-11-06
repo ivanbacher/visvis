@@ -34,3 +34,4 @@ node_modules
 #/dist #need this for github pages
 /test/coverage-jest
 /test/coverage-karma
+.chrome

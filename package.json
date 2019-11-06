@@ -61,7 +61,7 @@
   },
   "scripts": {
     "build": "au build",
-    "start": "au run",
+    "start": "au run --watch",
     "test": "au test"
   },
   "engines": {
