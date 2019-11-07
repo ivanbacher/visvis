@@ -1,7 +1,7 @@
 
 import * as d3 from 'd3';
 
-import data from './resources/data/00018.meta.json';
+import data_ from './resources/data/00018.meta.json';
 
 import 'normalize.css';
 
@@ -10,28 +10,46 @@ import 'normalize.css';
 //https://github.com/distillpub/post--augmented-rnns/blob/master/public/assets/rnn_attentional_ex3.html
 
 
-function handleFiles(files) {
-  //let files = event.target.files;
-  // fileList is just a property of input element
-
-  for (let i = 0; i < files.length; i++) {
-    files[i].webkitRelativePath;
-  }
-}
-
-function next() {
-
-}
-
-
 export class App {
   constructor() {
   	this.mouthSource = '';
   	this.waveSrc = '';
-	  this.labels = '';
+    this.labels = '';
+    this.metaFiles = [];
+    this.fileIndex = 0;
+  }
+
+  handleFiles(event) {
+    let files = event.target.files;
+    // fileList is just a property of input element
+
+    for (let i = 0; i < files.length; i++) {
+      let f = files[i];
+      if (f.webkitRelativePath.match(/.*\.meta\.json$/)) {
+        this.metaFiles.push(f);
+      }
+    }
+    this.next();
+  }
+
+
+  next() {
+    let reader = new FileReader();
+
+    reader.onload = (evt) => {
+      let data = JSON.parse(evt.target.result);
+      this.doAttached(data);
+    };
+    reader.readAsText(this.metaFiles[this.fileIndex], 'UTF-8');
+
+    this.fileIndex++;
   }
 
   attached() {
+    //this.doAttached(data_);
+  }
+
+  doAttached(data) {
     let data1 = data['text-audio'];
     let data2 = data['audio-video'];
     this.labels = data['labels'];

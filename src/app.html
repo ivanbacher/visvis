@@ -104,7 +104,7 @@
 
 	</style>
   <input type="file" id="filepicker" name="fileList"
-  onchange="handleFiles(this.files)"
+  change.delegate="handleFiles($event)"
   webkitdirectory multiple>         
   </input>
 
