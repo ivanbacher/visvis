@@ -33,16 +33,34 @@ export class App {
   }
 
 
-  next() {
-    let reader = new FileReader();
-
-    reader.onload = (evt) => {
-      let data = JSON.parse(evt.target.result);
+  previous() {
+    this.readMeta(this.metaFiles[this.fileIndex]).then( (data) => {
       this.doAttached(data);
-    };
-    reader.readAsText(this.metaFiles[this.fileIndex], 'UTF-8');
+      this.fileIndex--;
+    });
+  }
 
-    this.fileIndex++;
+  next() {
+    this.readMeta(this.metaFiles[this.fileIndex]).then( (data) => {
+      this.doAttached(data);
+      this.fileIndex++;
+    });
+  }
+
+  readMeta(file) {
+    let p = new Promise( (resolve, reject) => {
+      let reader = new FileReader();
+
+      reader.onload = (evt) => {
+        let data = JSON.parse(evt.target.result);
+
+        resolve(data);
+      };
+      reader.readAsText(this.metaFiles[this.fileIndex], 'UTF-8');
+    });
+
+    return p;
+    
   }
 
   attached() {
