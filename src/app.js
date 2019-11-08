@@ -21,7 +21,6 @@ export class App {
 
   handleFiles(event) {
     let files = event.target.files;
-    // fileList is just a property of input element
 
     for (let i = 0; i < files.length; i++) {
       let f = files[i];
@@ -60,11 +59,10 @@ export class App {
     });
 
     return p;
-    
   }
 
   attached() {
-    //this.doAttached(data_);
+    this.doAttached(data_);
   }
 
   doAttached(data) {

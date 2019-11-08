@@ -9,6 +9,7 @@ const { AureliaPlugin, ModuleDependenciesPlugin } = require('aurelia-webpack-plu
 const { ProvidePlugin } = require('webpack');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const ManifestPlugin = require('webpack-manifest-plugin');
+const nodeExternals = require('webpack-node-externals');
 
 // config helpers:
 const ensureArray = (config) => config && (Array.isArray(config) ? config : [config]) || [];
@@ -27,6 +28,10 @@ const cssRules = [
 ];
 
 module.exports = ({ production, server, extractCss, coverage, analyze, karma } = {}) => ({
+  target: 'node',
+  node: {
+    __dirname: true
+  },
   resolve: {
     extensions: ['.js'],
     modules: [srcDir, 'node_modules'],
@@ -35,15 +40,22 @@ module.exports = ({ production, server, extractCss, coverage, analyze, karma } =
     alias: { 'aurelia-binding': path.resolve(__dirname, 'node_modules/aurelia-binding') }
   },
   entry: {
-    app: ['aurelia-bootstrapper']
+    server: './src/server-main'
   },
+  externals: [nodeExternals({
+    whitelist: [
+      // these things should be in the webpack bundle
+      // other node_modules need to be left out
+      /font-awesome|bootstrap|-loader|aurelia-(?!pal-nodejs|pal|polyfills|bootstrapper)/,
+    ]
+  })],
   mode: production ? 'production' : 'development',
   output: {
     path: outDir,
     publicPath: baseUrl,
-    filename: production ? '[name].[chunkhash].bundle.js' : '[name].[hash].bundle.js',
-    sourceMapFilename: production ? '[name].[chunkhash].bundle.map' : '[name].[hash].bundle.map',
-    chunkFilename: production ? '[name].[chunkhash].chunk.js' : '[name].[hash].chunk.js'
+    filename: production ? '[name].bundle.js' : '[name].bundle.js',
+    sourceMapFilename: production ? '[name].bundle.map' : '[name].bundle.map',
+    chunkFilename: production ? '[name].[chunkhash].chunk.js' : '[id].chunk.js',
   },
   optimization: {
     runtimeChunk: true,  // separates the runtime chunk, required for long term cacheability
@@ -144,7 +156,11 @@ module.exports = ({ production, server, extractCss, coverage, analyze, karma } =
   },
   plugins: [
     ...when(!karma, new DuplicatePackageCheckerPlugin()),
-    new AureliaPlugin(),
+    new AureliaPlugin({
+      features: {
+        polyfills: 'none'
+      }
+    }),
     new CleanWebpackPlugin(),
     new ProvidePlugin({
     }),
@@ -153,19 +169,32 @@ module.exports = ({ production, server, extractCss, coverage, analyze, karma } =
       'aurelia-testing': ['./compile-spy', './view-spy']
     }),
     new HtmlWebpackPlugin({
-      template: 'index.ejs',
+      filename: ssr ? 'index.ssr.html' : 'index.html',
+      template: ssr ? 'index.ssr.ejs' : 'index.ejs',
+      minify: production ? {
+        // we don't want to remove comments as they are used as a placeholder
+        // for Aurelia SSR
+        removeComments: false,
+        collapseWhitespace: true
+      } : undefined,
       metadata: {
         // available in index.ejs //
         title, server, baseUrl
-      }
+      },
     }),
     // ref: https://webpack.js.org/plugins/mini-css-extract-plugin/
     ...when(extractCss, new MiniCssExtractPlugin({ // updated to match the naming conventions for the js files
-      filename: production ? 'css/[name].[contenthash].bundle.css' : 'css/[name].[hash].bundle.css',
-      chunkFilename: production ? 'css/[name].[contenthash].chunk.css' : 'css/[name].[hash].chunk.css'
+      filename: production ? 'css/[id].css' : 'css/[name].[hash].bundle.css',
+      chunkFilename: production ? 'css/[name].[contenthash].chunk.css' : 'css/[name].[hash].chunk.css',
+      allChunks: true,
     })),
     ...when(production || server, new CopyWebpackPlugin([
-      { from: 'static', to: outDir, ignore: ['.*'] }])), // ignore dot (hidden) files
-    ...when(analyze, new BundleAnalyzerPlugin())
+      {from: 'static', to: outDir, ignore: ['.*'] },  
+      { from: 'node_modules/preboot/__dist/preboot_browser.js', to: 'preboot_browser.js' }
+    ])), // ignore dot (hidden) files
+    ...when(analyze, new BundleAnalyzerPlugin()),
+    ...when(production, new CommonsChunkPlugin({
+      name: 'common'
+    }))
   ]
 });
