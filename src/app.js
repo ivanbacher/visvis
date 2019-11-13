@@ -1,9 +1,10 @@
 
 import * as d3 from 'd3';
 
-import data_ from './resources/data/00018.meta.json';
 
 import 'normalize.css';
+
+var DEFAULT_DATA = './example/00018.meta.json'
 
 // debugger;
 
@@ -12,11 +13,12 @@ import 'normalize.css';
 
 export class App {
   constructor() {
-  	this.mouthSource = '';
-  	this.waveSrc = '';
+    this.mouthSource = '';
+    this.waveSrc = '';
     this.labels = '';
     this.metaFiles = [];
     this.fileIndex = 0;
+    this.data_ = null;
   }
 
   handleFiles(event) {
@@ -61,8 +63,14 @@ export class App {
     return p;
   }
 
+  activate() {
+    return fetch(DEFAULT_DATA, {method: 'GET'})
+	.then(response => {return response.json()})
+        .then(json => { this.data_ = json});
+  }
+
   attached() {
-    this.doAttached(data_);
+    this.doAttached(this.data_);
   }
 
   doAttached(data) {
