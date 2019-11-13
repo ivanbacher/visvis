@@ -78,6 +78,7 @@ export class App {
     let data2 = data['audio-video'];
     this.labels = data['labels'];
     this.videoFrames = data['video-frames'];
+    this.waveSrc = data['spectrogram']
 
   	// LABELS -- START
 
@@ -471,14 +472,13 @@ export class App {
       .attr('class', 'audio')
       .attr('transform', 'translate(0, ' + (nodeMargin * 4 + nodeSizeB + networkMargin) + ')');
 
-    /*
     audio.append('image')
-      .attr('xlink:href', '/images/rnn-attention-waveform-bw.png')
+      .attr('xlink:href', this.waveSrc)
       .attr('width', width - ( (width / 100) * 1) )
       .attr('preserveAspectRatio', 'none')
       .attr('height', audioHeight)
       .attr('transform', `translate( ${ (width / 100) * 0.5 } ,0)`); //magic numbers
-    */
+    
     audio.append('rect')
       .attr('class', 'audio-background')
       .attr('width', width)
