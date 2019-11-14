@@ -82,10 +82,12 @@ export class App {
 
   	// LABELS -- START
 
-    let labelsA = this.labels.map( (char) => {
-      return (char === ' ') ? '_' : char;
-    });
-    let labelsB = d3.range(data1.length);
+    let labelsA = this.labels
+      .filter( (char) => char !== 'EOS' )
+      .map( (char) => {
+     	return (char === ' ') ? '_' : char;
+    }).concat(['EOS']);
+    let labelsB = d3.range(data1[0].length);
 
     let labelsC = d3.range(data2.length);
     let labelsD = d3.range(data2[0].length);
