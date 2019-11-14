@@ -202,7 +202,7 @@ export class App {
     let networkHeightD = nodeSizeD + nodeMargin * 2;
 
     // eslint-disable-next-line camelcase
-    let linkA_B = function(d) { //FIXME: do we have to rename d.ai and d.bi??
+    let linkA_B = function(d) { 
       let temp = 'M' + (xa(d.ai) + nodeSizeA / 2) + ',' + (nodeSizeA + nodeMargin)
         + 'C' + (xa(d.ai) + nodeSizeA / 2) + ',' + (nodeSizeA + networkMargin / 3 + nodeMargin)
         + ' ' + (xb(d.bi) + nodeSizeB / 2) + ',' + (networkMargin - networkMargin / 3 + nodeMargin)
@@ -316,6 +316,8 @@ export class App {
     //
     // Network A
     //
+    // clear if exists
+    html.select('g .network-a').remove()
     let networkA = svg.append('g')
       .attr('class', 'network-a');
 
@@ -384,6 +386,7 @@ export class App {
     //
     // Network B
     //
+    html.select('g .network-b').remove()
     let networkB = svg.append('g')
       .attr('class', 'network-b')
       .attr('transform', 'translate(0, ' + networkMargin + ')');
@@ -449,7 +452,8 @@ export class App {
     //
     // Links 1 (B - A)
     //
-    let linkGroup1 = svg.append('g').attr('class', '.link-group-1');
+    html.select('g .link-group-1').remove()
+    let linkGroup1 = svg.append('g').attr('class', 'link-group-1');
 
     let linklink1 = linkGroup1.selectAll('.link')
       .data(linkData1)
@@ -468,6 +472,7 @@ export class App {
       .style('width', '90%')
       .style('height', '50px');
 
+    html.select('g .audio').remove()
     let audio = svg.append('g')
       .attr('class', 'audio')
       .attr('transform', 'translate(0, ' + (nodeMargin * 4 + nodeSizeB + networkMargin) + ')');
@@ -511,6 +516,7 @@ export class App {
     //
     // Network C
     //
+    html.select('g .network-c').remove()
     let networkC = svg.append('g')
       .attr('class', 'network-c')
       .attr('transform', 'translate(0, ' + (nodeMargin * 4 + nodeSizeC + networkMargin + (audioHeight + nodeSizeC) ) + ')');
@@ -576,6 +582,7 @@ export class App {
     //
     // Network D
     //
+    html.select('g .network-d').remove()
     let networkD = svg.append('g')
       .attr('class', 'network-d')
       .attr('transform', 'translate(0, ' + (nodeMargin * 4 + nodeSizeD + (networkMargin * 2) + (audioHeight + nodeSizeD) ) + ')');
@@ -646,7 +653,8 @@ export class App {
     //
     // Links 2 (D - C)
     //
-    let linkGroup2 = svg.append('g').attr('class', '.link-group-2')
+    html.select('g .link-group-2').remove()
+    let linkGroup2 = svg.append('g').attr('class', 'link-group-2')
       .attr('transform', 'translate(0, ' + (nodeMargin * 4 + nodeSizeD + networkMargin + (audioHeight + nodeSizeD) ) + ')');
 
     let linklink2 = linkGroup2.selectAll('.link')
